@@ -4,6 +4,7 @@ import { Camera, CameraType, CameraView } from 'expo-camera';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useRef, useEffect } from 'react';
 import { Button, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React from 'react';
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);

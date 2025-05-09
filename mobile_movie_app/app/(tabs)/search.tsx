@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, ActivityIndicator, FlatList, Image } from "react-native";
+import { View, Text, ActivityIndicator, FlatList, Image, TouchableOpacity } from "react-native";
 
 import { images } from "@/constants/images";
 import { icons } from "@/constants/icons";
@@ -9,6 +9,8 @@ import { updateSearchCount } from "@/services/appwrite";
 import SearchBar from "@/components/SearchBar";
 import MovieDisplayCard from "@/components/MovieCard";
 import useFetch from "@/services/useFetch";
+import React from "react";
+import { router } from "expo-router";
 
 
 const Search = () => {
@@ -43,10 +45,10 @@ const Search = () => {
   }, [searchQuery]);
 
   useEffect(() => {
-        // Call updateSearchCount only if there are results
-        if (movies?.length! > 0 && movies?.[0]) {
-          updateSearchCount(searchQuery, movies[0]);
-        }
+    // Call updateSearchCount only if there are results
+    if (movies?.length! > 0 && movies?.[0]) {
+      updateSearchCount(searchQuery, movies[0]);
+    }
   }, [movies])
 
   return (
@@ -120,6 +122,19 @@ const Search = () => {
           ) : null
         }
       />
+      <TouchableOpacity
+        className="left-0 right-0 mx-5 bg-accent rounded-lg py-3.5 flex flex-row items-center justify-center z-50"
+        style={{ marginBottom: 120 }}
+        onPress={() => router.push("/recommendate")}
+      >
+        <Image
+          source={icons.arrow}
+          className="size-5 mr-1 mt-0.5 rotate-180"
+          tintColor="#fff"
+        />
+        <Text className="text-white font-semibold text-base">Get Recommendation</Text>
+
+      </TouchableOpacity>
     </View>
   );
 };

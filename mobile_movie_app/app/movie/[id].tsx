@@ -97,7 +97,7 @@ const Details = () => {
               )} million`}
             />
           </View>
-
+          
           <MovieInfo
             label="Production Companies"
             value={
