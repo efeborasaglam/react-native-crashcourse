@@ -6,6 +6,9 @@ import useFetch from '@/services/useFetch';
 import { icons } from '@/constants/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { useUser } from '@clerk/clerk-expo';
+
 
 interface MovieInfoProps {
   label: string;
@@ -25,6 +28,33 @@ const Details = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const { data: movie, loading } = useFetch(() => fetchMovieDetails(id as string));
+  const [comment, setComment] = useState('');
+  const { user } = useUser();
+
+  type CommentType = { email: string; text: string };
+
+  const [comments, setComments] = useState<CommentType[]>([]);
+
+  useEffect(() => {
+    const loadComments = async () => {
+      const saved = await AsyncStorage.getItem(`comments_${id}`);
+      if (saved) {
+        setComments(JSON.parse(saved));
+      }
+    };
+    loadComments();
+  }, [id]);
+
+  const submitComment = async () => {
+    if (!comment.trim() || !user) return;
+    const newComment = { email: user.emailAddresses[0].emailAddress, text: comment.trim() };
+    const updatedComments = [...comments, newComment];
+    setComments(updatedComments);
+    setComment('');
+    await AsyncStorage.setItem(`comments_${id}`, JSON.stringify(updatedComments));
+  };
+
+
 
   const saveMovie = async () => {
     if (!movie) return;
@@ -54,7 +84,7 @@ const Details = () => {
             style={{ width: "100%", height: 550 }}
             resizeMode="cover"
           />
-          
+
           <TouchableOpacity onPress={saveMovie} className="absolute top-5 right-5 rounded-full size-14 bg-white flex items-center justify-center">
             <Image source={icons.save} className="w-6 h-6" resizeMode="stretch" />
           </TouchableOpacity>
@@ -104,11 +134,45 @@ const Details = () => {
               movie?.production_companies?.map((c) => c.name).join(" • ") ||
               "N/A"
             }
+            
           />
         </View>
+        
+                <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          keyboardVerticalOffset={100}
+          className="mt-4 px-5"
+        >
+          <TextInput
+            placeholder="Add a comment..."
+            placeholderTextColor="#aaa"
+            value={comment}
+            onChangeText={setComment}
+            className="bg-dark-100 text-white rounded-md px-4 py-3 mb-2"
+          />
+          <TouchableOpacity
+            onPress={submitComment}
+            className="bg-accent rounded-md py-3 flex items-center justify-center"
+          >
+            <Text className="text-white font-semibold">Submit Comment</Text>
+          </TouchableOpacity>
+
+          {/* Kommentare anzeigen */}
+          <View className="mt-4">
+            {comments.map((c, idx) => (
+              <View key={idx} className="mb-3 bg-dark-100 rounded-md p-3">
+                <Text className="text-xs text-white mb-1">{c.email}</Text>
+                <Text className="text-white">{c.text}</Text>
+              </View>
+            ))}
+          </View>
+        </KeyboardAvoidingView>
+
       </ScrollView>
-      
-      <TouchableOpacity
+
+      <View className="mt-6 w-full">
+
+              <TouchableOpacity
         className="mb-4 bottom-5 left-0 right-0 mx-5 bg-accent rounded-lg py-3.5 flex flex-row items-center justify-center z-50"
         onPress={router.back}
       >
@@ -119,6 +183,10 @@ const Details = () => {
         />
         <Text className="text-white font-semibold text-base">Go Back</Text>
       </TouchableOpacity>
+
+
+      </View>
+
     </View>
   );
 };

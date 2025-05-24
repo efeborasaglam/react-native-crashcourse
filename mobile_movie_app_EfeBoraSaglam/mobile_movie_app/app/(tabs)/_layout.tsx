@@ -32,26 +32,26 @@ const TabIcon = ({ focused, icon, title }: TabIconProps) => {
 const _layout = () => {
   return (
     <Tabs 
-    screenOptions={{
-      tabBarShowLabel: false,
-      tabBarItemStyle: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center'
-      },
-      tabBarStyle: {
-        backgroundColor: '#0f0D23',
-        borderRadius: 50,
-        marginHorizontal: 20,
-        marginBottom: 36,
-        height: 52,
-        position: 'absolute',
-        overflow: 'hidden',
-        borderWidth: 1,
-        borderColor: '#0f0D23'
-      }
-    }}
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarItemStyle: {
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center'
+        },
+        tabBarStyle: {
+          backgroundColor: '#0f0D23',
+          borderRadius: 50,
+          marginHorizontal: 20,
+          marginBottom: 36,
+          height: 52,
+          position: 'absolute',
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: '#0f0D23'
+        }
+      }}
     >
       <Tabs.Screen
         name="index"
@@ -98,7 +98,7 @@ const _layout = () => {
       <Tabs.Screen
         name='profile'
         options={{
-          title: 'Profile',
+          title: 'Profile',     
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TabIcon
