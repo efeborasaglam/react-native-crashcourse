@@ -1,6 +1,6 @@
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
 import { Link } from 'expo-router'
-import { Text, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import { SignOutButton } from '@/components/SignOutButton'
 
 export default function ProfileScreen() {
@@ -15,12 +15,24 @@ export default function ProfileScreen() {
         <SignOutButton />
       </SignedIn>
       <SignedOut>
-        <Link href="/(auth)/sign-in">
-          <Text className="text-blue-500">Sign in</Text>
-        </Link>
-        <Link href="/(auth)/sign-up">
-          <Text className="text-blue-500 mt-2">Sign up</Text>
-        </Link>
+        <TouchableOpacity
+          className="bg-sky-600 rounded-md py-3 flex items-center justify-center mb-4 p-3"
+        >
+          <Link href="/(auth)/sign-in">
+            <Text className="text-white">Sign in</Text>
+          </Link>
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="bg-accent rounded-md py-3 flex items-center justify-center p-3"
+        >
+          <Link href="/(auth)/sign-in">
+            <Link href="/(auth)/sign-up">
+              <Text className="text-white mt-2">Sign up</Text>
+            </Link>
+          </Link>
+        </TouchableOpacity>
+
+
       </SignedOut>
     </View>
   )
